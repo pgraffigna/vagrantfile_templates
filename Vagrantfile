@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
     t.vm.network "private_network", ip: "192.168.60.10"
     t.vm.hostname = "template"
 
-    t.vm.provider :virtualbox do |v|
+    config.vm.provider :virtualbox do |v|
       v.name = "template"
       v.memory = 512
       v.cpus = 1
