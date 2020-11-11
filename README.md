@@ -1,3 +1,3 @@
 # vagrant_template
 
-Vagrantfile con configuraciones básicas para iniciar un servidor ubuntu 20.04 para testing.
+Vagrantfile para desplegar un entorno cliente-servidor con Ubuntu 20.04.

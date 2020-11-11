@@ -18,16 +18,23 @@ Vagrant.configure("2") do |config|
   config.vm.define "master" do |m|
     m.vm.box = "geerlingguy/ubuntu1804"
     m.vm.network "private_network", ip: "192.168.60.10"
+    m.vm.network "forwarded_port", guest: 80, host: 8080
     m.vm.hostname = "master"
-    
-    m.vm.provision "shell", 
-    inline: "sudo echo 192.168.60.11 node | sudo tee -a /etc/hosts"
-    
+    m.vm.provision :docker
+    m.vm.provision :docker_compose    
+
+    m.vm.provision "shell", inline: <<-SHELL 
+    sudo echo 192.168.60.11 node | sudo tee -a /etc/hosts
+    sudo apt-get update && sudo apt-get autoremove
+    DEBIAN_FRONTEND=noninteractive apt-get install -y vim mc tmux nano
+    sudo apt-get clean
+   SHELL
+
     m.vm.provider :virtualbox do |vb|
-      v.name = "template"
-      v.memory = 512
-      v.cpus = 1
-      v.check_guest_additions = false 
+      vb.name = "template"
+      vb.memory = 2048
+      vb.cpus = 2
+      vb.check_guest_additions = false 
     end 
   end  
     
@@ -38,5 +45,7 @@ Vagrant.configure("2") do |config|
     
     n.vm.provision "shell",
     inline: "sudo echo 192.168.60.10 master | sudo tee -a /etc/hosts"
+
+    n.vm.post_up_message = "Todos los procesos terminaron correctamente!!!"
   end  
 end
