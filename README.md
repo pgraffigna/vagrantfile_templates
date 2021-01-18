@@ -1,3 +1,3 @@
 # vagrant_template
 
-Vagrantfile para desplegar un entorno cliente-servidor con Ubuntu 20.04.
+Templates para desplegar entornos de trabajo cliente-servidor usando vagrant.
