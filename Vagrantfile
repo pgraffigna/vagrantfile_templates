@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
     sudo apt-get update && sudo apt-get autoremove
     DEBIAN_FRONTEND=noninteractive apt-get install -y vim mc tmux nano
     sudo apt-get clean
-   SHELL
+    SHELL
 
     m.vm.provider :virtualbox do |vb|
       vb.name = "template"
