@@ -1,0 +1,15 @@
+# Let NetworkManager manage all devices on this system
+# Configuración bridge para usar con vagrant-libvirt
+
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp1s0:
+      dhcp4: false
+      accept-ra: false
+  bridges:
+    br-mgmt:
+      dhcp4: true
+      interfaces:
+        - enp1s0
