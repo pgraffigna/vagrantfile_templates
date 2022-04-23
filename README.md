@@ -25,4 +25,20 @@ if Vagrant.has_plugin?("vagrant-cachier")
       type: :nfs,
       mount_options: ['rw', 'vers=3', 'tcp', 'nolock'] }
   end
-```   
+```
+- vagrant plugin install vagrant-vbguest
+
+```ruby
+  unless Vagrant.has_plugin?("vagrant-vbguest")
+    puts 'Instalando el plugin vagrant-vbguest ...'
+    system('vagrant plugin install vagrant-vbguest')
+  end
+```
+- vagrant plugin install vagrant-docker-compose
+
+```ruby
+  unless Vagrant.has_plugin?("vagrant-docker-compose")
+    puts 'Instalando el plugin vagrant-docker-compose ...'
+    system('vagrant plugin install vagrant-docker-compose')
+  end
+```
