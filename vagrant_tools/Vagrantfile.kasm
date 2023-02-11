@@ -1,0 +1,38 @@
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'libvirt'
+IMAGEN = "generic/ubuntu2004"
+
+Vagrant.configure("2") do |config|
+  config.ssh.insert_key = false
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+$SCRIPT = <<-SCRIPT
+  export KASM_VER="1.12.0.d4fd8a"
+  export KASM_URL="https://kasm-static-content.s3.amazonaws.com/kasm_release_$KASM_VER.tar.gz"
+  export KASM_GZ="kasm_release_$KASM_VER.tar.gz"
+  export KASM_TAR="kasm_release_$KASM_VER.tar"
+
+  sudo fallocate -l 4g /mnt/4GiB.swap
+  sudo chmod 600 /mnt/4GiB.swap
+  sudo mkswap /mnt/4GiB.swap
+  sudo swapon /mnt/4GiB.swap
+  echo '/mnt/4GiB.swap swap swap defaults 0 0' | sudo tee -a /etc/fstab
+
+  cd /tmp && wget -q --show-progress --progress=bar:force 2>&1 $KASM_URL
+  gunzip /tmp/$KASM_GZ
+  tar -xf /tmp/$KASM_TAR
+SCRIPT
+
+  config.vm.define "kasm" do |t|
+    t.vm.box = IMAGEN
+    t.vm.hostname = "kasm.cultura.lab"
+    t.vm.provision "shell", inline: $SCRIPT
+    t.vm.post_up_message = "Falta correr el instalador dentro de la VM..sudo bash /tmp/kasm_release/install.sh"
+  end
+
+  config.vm.provider :libvirt do |v|
+    v.memory = 2048
+    v.cpus = 2
+  end
+end
+
+

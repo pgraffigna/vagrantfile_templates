@@ -1,0 +1,43 @@
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'libvirt'
+IMAGEN = "generic/ubuntu2004"
+HOSTNAME = "master.cultura.lab"
+
+$script = <<-SCRIPT
+  export REPO_HASH_ID=https://gitlab.com/kalilinux/packages/hash-identifier.git
+  export REPO_JOHN=https://github.com/openwall/john
+
+  echo "Instalando Hash-identifier"
+  sudo apt update && sudo apt-get install -y $1
+  git clone "$REPO_HASH_ID"
+
+  echo "Instalando Hashcat"
+  sudo apt-get install -y $2
+
+  echo "Instalando John the ripper"
+  sudo apt-get install -y $3 $4 $5 $6 $7
+  git clone "$REPO_JOHN"
+  cd /home/vagrant/john/src && sudo ./configure && sudo make -s clean && sudo make -sj4
+  echo "Todos los procesos terminaron correctamente!!!"
+SCRIPT
+
+Vagrant.configure("2") do |config|
+  config.ssh.insert_key = false
+  config.vm.synced_folder ".", "/home/vagrant", type: "rsync", disabled: true
+
+  config.vm.define "master" do |m|
+    m.vm.box = IMAGEN
+    m.vm.hostname = HOSTNAME
+    m.vm.box_check_update = false
+    m.vm.provision :shell, inline: $script, :args  => ['git', 'hashcat', 'libssl-dev', 'gcc', 'make', 'libbz2-dev', 'zlib1g-dev']
+
+    m.vm.provider :libvirt do |v|
+      v.memory = 2048
+      v.cpus = 2
+    end
+  end
+end
+
+## ejemplos de uso
+# hashcat --example-hash | grep -i 'sha-256'
+# ./john/run/john --wordlist=wordlist.txt --format=gost hackC.txt
+# python3 hash-id.py HASH 

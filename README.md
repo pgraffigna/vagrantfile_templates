@@ -15,7 +15,7 @@ if Vagrant.has_plugin?("vagrant-hostmanager")
    config.hostmanager.ignore_private_ip = false
    config.hostmanager.include_offline = true
    end
-```   
+```
 - vagrant plugin install vagrant-cachier
 
 ```ruby
