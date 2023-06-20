@@ -1,5 +1,6 @@
 ENV['VAGRANT_DEFAULT_PROVIDER'] = 'libvirt'
 IMAGEN = "generic/ubuntu2004"
+HOSTNAME = "kasm"
 
 Vagrant.configure("2") do |config|
   config.ssh.insert_key = false
@@ -24,7 +25,7 @@ SCRIPT
 
   config.vm.define "kasm" do |t|
     t.vm.box = IMAGEN
-    t.vm.hostname = "kasm.cultura.lab"
+    t.vm.hostname = HOSTNAME
     t.vm.provision "shell", inline: $SCRIPT
     t.vm.post_up_message = "Falta correr el instalador dentro de la VM..sudo bash /tmp/kasm_release/install.sh"
   end

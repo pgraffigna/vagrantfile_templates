@@ -1,6 +1,6 @@
 ENV['VAGRANT_DEFAULT_PROVIDER'] = 'libvirt'
 IMAGEN = "generic/ubuntu2004"
-HOSTNAME = "master.cultura.lab"
+HOSTNAME = "master"
 
 $script = <<-SCRIPT
   export REPO_HASH_ID=https://gitlab.com/kalilinux/packages/hash-identifier.git
@@ -37,7 +37,3 @@ Vagrant.configure("2") do |config|
   end
 end
 
-## ejemplos de uso
-# hashcat --example-hash | grep -i 'sha-256'
-# ./john/run/john --wordlist=wordlist.txt --format=gost hackC.txt
-# python3 hash-id.py HASH 
